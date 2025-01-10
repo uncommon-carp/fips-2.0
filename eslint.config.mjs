@@ -12,4 +12,10 @@ export default tseslint.config(
       semi: ['error', 'always'],
     },
   },
+  {
+    files: ['webpack.sls.ts'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
 );
