@@ -1,0 +1,22 @@
+applications:
+  - appRoot: packages/ui
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm ci
+        build:
+          commands:
+            - npm run build
+      artifacts:
+        baseDirectory: out
+        files:
+          - "**/*"
+      cache:
+        paths:
+          - node_modules/**/*
+    filters:
+      branchPatterns:
+        - main
+      paths:
+        - packages/ui/**
