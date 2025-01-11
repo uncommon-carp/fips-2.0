@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "commonjs",
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
-  "include": ["packages/**/*.ts", "packages/**/*.tsx"],
+  "include": ["serverless.ts", "packages/**/*.ts", "packages/**/*.tsx"],
   "exclude": ["node_modules"]
 }

@@ -4,19 +4,17 @@
   "description": "REST API for retrieving information about US counties.",
   "author": "Cory Sorel",
   "license": "ISC",
-  "type": "module",
   "workspaces": [
     "packages/server",
-    "packages/shared"
+    "packages/shared",
+    "packages/ui"
   ],
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
     "@eslint/js": "^9.18.0",
     "@typescript-eslint/parser": "^8.19.1",
     "eslint": "^9.17.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.19.1"
-  },
-  "dependencies": {
-    "@types/aws-lambda": "^8.10.147"
   }
 }
