@@ -75,3 +75,10 @@ export const getAllCounties: APIGatewayProxyHandler = async () => {
     };
   }
 };
+
+export const getCountiesByState: APIGatewayProxyHandler = async () => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: 'Get counties by state' }),
+  };
+};
