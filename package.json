@@ -4,6 +4,10 @@
   "description": "REST API for retrieving information about US counties.",
   "author": "Cory Sorel",
   "license": "ISC",
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "deploy": "npm run deploy --workspace=@fips/server"
+  },
   "workspaces": [
     "packages/server",
     "packages/shared",

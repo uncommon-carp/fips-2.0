@@ -4,17 +4,17 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "sls deploy"
   },
   "author": "Cory Sorel",
   "license": "ISC",
   "devDependencies": {
-    "@serverless/typescript": "^3.38.0",
-    "@types/webpack": "^5.28.5",
     "serverless": "^4.4.18",
-    "serverless-webpack": "^5.15.0",
     "ts-loader": "^9.5.1",
-    "ts-node": "^10.9.2",
-    "webpack": "^5.97.1"
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "@fips/shared": "^0.0.1",
+    "@serverless/typescript": "^3.38.0"
   }
 }

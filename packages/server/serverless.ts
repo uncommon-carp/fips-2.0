@@ -3,7 +3,7 @@ import { AWS } from '@serverless/typescript';
 const serverlessConfiguration: AWS = {
   service: 'server',
 
-  frameworkVersion: '3',
+  frameworkVersion: '4',
 
   provider: {
     name: 'aws',
@@ -18,7 +18,15 @@ const serverlessConfiguration: AWS = {
           {
             Effect: 'Allow',
             Action: 'DynamoDB:*',
-            Resource: `arn:aws:dynamodb:us-east-1:${process.env.AWS_ACCOUNT_ID}:table:*`,
+            Resource: `arn:aws:dynamodb:us-east-1:${process.env.AWS_ACCOUNT_ID}:table/Counties`,
+          },
+          {
+            Effect: 'Allow',
+            Action: ['s3:PutObject', 's3:GetObject', 's3:ListBucket'],
+            Resource: [
+              'arn:aws:s3:::county-bucket',
+              'arn:aws:s3:::county-bucket/*',
+            ],
           },
         ],
       },
@@ -38,8 +46,6 @@ const serverlessConfiguration: AWS = {
       number: 5,
     },
   },
-
-  plugins: ['serverless-webpack'],
 
   functions: {
     getAllCounties: {
@@ -92,6 +98,18 @@ const serverlessConfiguration: AWS = {
             { AttributeName: 'countyName', KeyType: 'RANGE' },
           ],
           BillingMode: 'PAY_PER_REQUEST',
+        },
+      },
+      CountyBucket: {
+        Type: 'AWS::S3::Bucket',
+        Properties: {
+          BucketName: 'county-bucket',
+          PublicAccessBlockConfiguration: {
+            BlockPublicAcls: true,
+            BlockPublicPolicy: true,
+            IgnorePublicAcls: true,
+            RestrictPublicBuckets: true,
+          },
         },
       },
     },
