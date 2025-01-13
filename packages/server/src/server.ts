@@ -28,7 +28,7 @@ interface StateData {
 
 export const getAllCounties: APIGatewayProxyHandler = async () => {
   const bucketName = 'county-bucket';
-  const key = 'fips_lookup_by_state.json'; // Replace with your file's key in the bucket
+  const key = 'fips_lookup_by_state.json';
 
   try {
     // Retrieve the JSON file from S3
