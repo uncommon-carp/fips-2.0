@@ -1,9 +1,16 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getS3Client } from '@fips/shared';
 import { Readable } from 'stream';
+import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 const s3 = getS3Client();
+const client = new DynamoDBClient({ region: 'us-east-1' });
+const db = DynamoDBDocumentClient.from(client, {
+  marshallOptions: { removeUndefinedValues: true },
+});
 
 export interface County {
   state: string;
@@ -76,9 +83,61 @@ export const getAllCounties: APIGatewayProxyHandler = async () => {
   }
 };
 
-export const getCountiesByState: APIGatewayProxyHandler = async () => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ msg: 'Get list of counties by state' }),
+export const getCountiesByState: APIGatewayProxyHandler = async (
+  event: APIGatewayProxyEvent,
+) => {
+  let { state } = event.pathParameters || {};
+
+  if (!state) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: 'State parameter is required.' }),
+    };
+  }
+
+  // Normalize the state input to title case (e.g., "texas" -> "Texas")
+  state = state
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  const params = {
+    TableName: 'Counties', // Replace with your table name
+    KeyConditionExpression: '#state = :state',
+    ExpressionAttributeNames: {
+      '#state': 'state', // Alias for the reserved keyword
+    },
+    ExpressionAttributeValues: marshall({
+      ':state': state, // The DocumentClient automatically handles marshalling
+    }),
   };
+
+  try {
+    // Query DynamoDB for all counties in the specified state
+    const command = new QueryCommand(params);
+    const response = await db.send(command);
+
+    if (!response.Items || response.Items.length === 0) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: `No counties found for state: ${state}`,
+        }),
+      };
+    }
+
+    const counties = response.Items.map((item) => unmarshall(item) as County);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(counties),
+    };
+  } catch (error) {
+    console.error('Error querying counties by state:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Failed to retrieve counties.' }),
+    };
+  }
 };
