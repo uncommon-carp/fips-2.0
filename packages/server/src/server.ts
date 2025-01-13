@@ -95,7 +95,6 @@ export const getCountiesByState: APIGatewayProxyHandler = async (
     };
   }
 
-  // Normalize the state input to title case (e.g., "texas" -> "Texas")
   state = state
     .toLowerCase()
     .split(' ')
@@ -103,13 +102,13 @@ export const getCountiesByState: APIGatewayProxyHandler = async (
     .join(' ');
 
   const params = {
-    TableName: 'Counties', // Replace with your table name
+    TableName: 'Counties',
     KeyConditionExpression: '#state = :state',
     ExpressionAttributeNames: {
-      '#state': 'state', // Alias for the reserved keyword
+      '#state': 'state',
     },
     ExpressionAttributeValues: marshall({
-      ':state': state, // The DocumentClient automatically handles marshalling
+      ':state': state,
     }),
   };
 
