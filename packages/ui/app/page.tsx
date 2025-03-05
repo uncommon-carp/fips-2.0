@@ -13,7 +13,7 @@ export default function HomePage() {
         <p className="mt-4 text-lg text-gray-300">
           Simplifying Access to FIPS County Codes for Developers and Analysts.
         </p>
-        <Link href="/search">
+        <Link href="/fips/search">
           <button className="mt-6 bg-teal-500 text-gray-900 px-6 py-3 rounded-lg font-semibold shadow hover:bg-teal-400">
             Start Searching
           </button>
@@ -61,7 +61,7 @@ export default function HomePage() {
       <footer className="py-6 bg-gray-800 text-center text-gray-400">
         <p>&copy; 2025 FIPS API. All rights reserved.</p>
         <div className="mt-4">
-          <Link href="/docs">
+          <Link href="/fips/docs">
             <button className="text-teal-400 hover:underline">
               API Documentation
             </button>
