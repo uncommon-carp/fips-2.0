@@ -1,7 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  basePath: '/fips',
-  assetPrefix: '/fips',
-};
+const nextConfig = {};
 
 module.exports = nextConfig;
