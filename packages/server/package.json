@@ -14,7 +14,7 @@
     "ts-node": "^10.9.2"
   },
   "dependencies": {
-    "@fips/shared": "^0.0.1",
+    "@fips/shared": "^1.0.0",
     "@serverless/typescript": "^3.38.0"
   }
 }
