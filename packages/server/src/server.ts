@@ -54,6 +54,8 @@ export const getAllCounties: APIGatewayProxyHandler = async () => {
     // Parse the JSON file and transform it into an array of County objects
     const rawData: Record<string, StateData> = JSON.parse(fileContent);
 
+    console.log(fileContent);
+
     const counties: County[] = [];
     for (const [stateAbbrev, stateInfo] of Object.entries(rawData)) {
       const stateName = stateInfo._name;

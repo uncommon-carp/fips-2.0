@@ -1,5 +1,8 @@
 import { AWS } from '@serverless/typescript';
 
+const AWS_PROFILE = process.env.AWS_PROFILE;
+const AWS_ACCOUNT_ID = process.env.AWS_ACCOUNT_ID;
+
 const serverlessConfiguration: AWS = {
   service: 'server',
 
@@ -7,6 +10,7 @@ const serverlessConfiguration: AWS = {
 
   provider: {
     name: 'aws',
+    profile: AWS_PROFILE,
     runtime: 'nodejs18.x',
     region: 'us-east-1',
     httpApi: {
@@ -18,7 +22,7 @@ const serverlessConfiguration: AWS = {
           {
             Effect: 'Allow',
             Action: 'DynamoDB:*',
-            Resource: `arn:aws:dynamodb:us-east-1:${process.env.AWS_ACCOUNT_ID}:table/Counties`,
+            Resource: `arn:aws:dynamodb:us-east-1:${AWS_ACCOUNT_ID}:table/Counties`,
           },
           {
             Effect: 'Allow',
@@ -34,9 +38,6 @@ const serverlessConfiguration: AWS = {
   },
 
   custom: {
-    webpack: {
-      webpackConfig: './webpack.sls.ts',
-    },
     memory: {
       prd: 1536,
       other: 1024, // default lambda memorySize
@@ -54,28 +55,6 @@ const serverlessConfiguration: AWS = {
         {
           httpApi: {
             path: '/counties',
-            method: 'GET',
-          },
-        },
-      ],
-    },
-    getCountyByName: {
-      handler: 'src/server.getCountyByName',
-      events: [
-        {
-          httpApi: {
-            path: '/counties/{name}/{state}',
-            method: 'GET',
-          },
-        },
-      ],
-    },
-    getCountiesByState: {
-      handler: 'src/server.getCountiesByState',
-      events: [
-        {
-          httpApi: {
-            path: '/counties/{state}',
             method: 'GET',
           },
         },
