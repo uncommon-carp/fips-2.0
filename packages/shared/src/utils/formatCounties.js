@@ -16,10 +16,10 @@ async function transformCountyData(inputFilePath, outputFilePath) {
         if (!countyName.startsWith('_')) {
           const fipsCode = stateInfo[countyName];
           transformedData.push({
-            stateAbbrev: stateAbbrev,
-            state: stateName,
-            stateFips: stateFips,
-            county: countyName,
+            stateAbbrev: stateAbbrev.toUpperCase(),
+            state: stateName.toUpperCase(),
+            stateFips: stateFips.toUpperCase(),
+            county: countyName.toUpperCase(),
             fips: fipsCode,
           });
         }
