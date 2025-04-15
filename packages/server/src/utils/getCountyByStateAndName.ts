@@ -1,4 +1,4 @@
-import { fetchS3Object } from '@fips/shared/src/utils/s3/fetchS3Object';
+import { fetchS3Object } from '@fips/shared';
 import Fuse from 'fuse.js';
 
 export const getCountyByStateAndName = async (
