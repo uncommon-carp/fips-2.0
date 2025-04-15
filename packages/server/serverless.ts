@@ -54,6 +54,17 @@ const serverlessConfiguration: AWS = {
       events: [
         {
           httpApi: {
+            path: '/index',
+            method: 'GET',
+          },
+        },
+      ],
+    },
+    countySearch: {
+      handler: 'src/server.searchHandler',
+      events: [
+        {
+          httpApi: {
             path: '/counties',
             method: 'GET',
           },

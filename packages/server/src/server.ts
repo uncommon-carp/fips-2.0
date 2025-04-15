@@ -3,6 +3,7 @@ import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getS3Client } from '@fips/shared';
 import { fetchS3Object } from '@fips/shared/src/utils/s3/fetchS3Object';
 import Fuse from 'fuse.js';
+import { getCountyByStateAndName } from './utils/getCountyByStateAndName';
 
 const s3 = getS3Client();
 
@@ -40,29 +41,27 @@ export const getAllCounties: APIGatewayProxyHandler = async () => {
   }
 };
 
-export const getCountyByName: APIGatewayProxyHandler = async (
+export const searchHandler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent,
 ) => {
-  if (
-    !event.pathParameters ||
-    !event.pathParameters.state ||
-    !event.pathParameters.county
-  ) {
+  if (!event.queryStringParameters) {
     return { statusCode: 504, body: 'Missing parameters in request' };
   }
 
+  const { state, county, search } = event.queryStringParameters;
+
   try {
-    let counties = [];
-    const fileContent = await fetchS3Object(bucketName, 'fips_list.json');
-    if (typeof fileContent === 'string') {
-      counties = await JSON.parse(fileContent);
+    let result;
+    if (state && county) {
+      result = await getCountyByStateAndName(state, county);
+      // } else if (state && !county) {
+      //   result = await getCountiesByState(state);
+      // } else if (search) {
+      //   result = await searchByString(search);
+      // }
+    } else {
+      result = 'Parameters not handled yet';
     }
-    const fuse = new Fuse(counties, { keys: ['state', 'county'] });
-
-    const { state, county } = event.pathParameters;
-
-    const result = fuse.search({ state, county });
-
     return { statusCode: 200, body: JSON.stringify(result) };
   } catch (err) {
     console.error(err);

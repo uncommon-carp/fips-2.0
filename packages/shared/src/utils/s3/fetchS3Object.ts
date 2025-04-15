@@ -4,7 +4,7 @@ export const fetchS3Object = async (
   bucketName: string,
   key: string,
   s3 = new S3Client({ region: 'us-east-1' }),
-) => {
+): Promise<string> => {
   const command = new GetObjectCommand({
     Bucket: bucketName,
     Key: key,
@@ -16,4 +16,6 @@ export const fetchS3Object = async (
 
     return fileContent;
   }
+
+  throw new Error('Failed to process S3 object');
 };
