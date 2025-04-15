@@ -12,6 +12,7 @@ export const getCountiesByState = async (state: string) => {
   const fuse = new Fuse(countyList, options);
 
   const results = fuse.search(state);
+  const counties = results.map((county) => county.item);
 
-  return results;
+  return counties;
 };

@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { getS3Client } from '@fips/shared';
+import { getS3Client, normalizeCountyName } from '@fips/shared';
 import { getCountyByStateAndName } from './utils/getCountyByStateAndName';
 import { getCountiesByState } from './utils/getCountiesByState';
 
@@ -44,7 +44,7 @@ export const searchHandler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent,
 ) => {
   if (!event.queryStringParameters) {
-    return { statusCode: 504, body: 'Missing parameters in request' };
+    return { statusCode: 400, body: 'Missing parameters in request' };
   }
 
   const { state, county } = event.queryStringParameters;
@@ -52,12 +52,12 @@ export const searchHandler: APIGatewayProxyHandler = async (
   try {
     let result;
     if (state && county) {
-      const normalized = normalizeCountyName(county);
-      result = await getCountyByStateAndName(state.toUpperCase(), normalized);
+      const normalized = normalizeCountyName(county, state === 'LOUISIANA');
+      result = await getCountyByStateAndName(state, normalized);
     } else if (state && !county) {
       result = await getCountiesByState(state);
     } else {
-      return { statusCode: 405, body: 'Invalid query parameters' };
+      return { statusCode: 400, body: 'Invalid query parameters' };
     }
     return { statusCode: 200, body: JSON.stringify(result) };
   } catch (err) {
