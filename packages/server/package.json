@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@fips/shared": "^1.0.0",
-    "@serverless/typescript": "^3.38.0"
+    "@serverless/typescript": "^3.38.0",
+    "fuse.js": "^7.1.0"
   }
 }
