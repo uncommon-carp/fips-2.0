@@ -4,18 +4,28 @@ import Results from '@/components/ui/results';
 import React, { useState } from 'react';
 
 const SearchPage = () => {
-  const [query, setQuery] = useState('');
+  const [searchType, setSearchType] = useState('stateAndName'); // Default to 'state'
+  const [stateQuery, setStateQuery] = useState('');
+  const [nameQuery, setNameQuery] = useState('');
   const [results, setResults] = useState<[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSearch = async () => {
-    if (!query.trim()) return;
+    let query = '';
+    if (searchType === 'state') {
+      query = `state=${stateQuery}`;
+      if (!query.trim()) return;
+    } else if (searchType === 'stateAndName') {
+      if (!stateQuery.trim() || !nameQuery.trim()) return;
+      query = encodeURIComponent(`state=${stateQuery}&name=${nameQuery}`);
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`/api/search?q=${query}`);
+      const response = await fetch(`/api/search?${query}`); // Send search type to the API
       if (!response.ok) throw new Error('Failed to fetch results');
       const data = await response.json();
       setResults(data);
@@ -29,20 +39,56 @@ const SearchPage = () => {
   return (
     <div className="min-h-screen bg-[#2a3941] text-white flex flex-col items-center py-10">
       <h1 className="text-3xl font-bold mb-6">
-        Search by City, State, or County
+        {searchType === 'state'
+          ? 'List All Counties For A State'
+          : 'Get A Single County'}
       </h1>
-      <p className="text-gray-300 mb-4">
-        Enter a city and state (e.g., "Austin, TX") or a county name (e.g.,
-        "Travis County").
-      </p>
+      <div className="mb-4">
+        <label htmlFor="searchType" className="mr-2 text-gray-300">
+          Search By:
+        </label>
+        <select
+          id="searchType"
+          value={searchType}
+          onChange={(e) => {
+            setSearchType(e.target.value);
+            setStateQuery(''); // Reset queries when search type changes
+            setNameQuery('');
+          }}
+          className="bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
+        >
+          <option value="state">By State</option>
+          <option value="stateAndName">By State and Name</option>
+        </select>
+      </div>
       <div className="w-full max-w-xl flex gap-2">
-        <input
-          type="text"
-          placeholder="City, State or County Name..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full px-4 py-2 bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
-        />
+        {searchType === 'state' && (
+          <input
+            type="text"
+            placeholder="Enter State..."
+            value={stateQuery}
+            onChange={(e) => setStateQuery(e.target.value)}
+            className="w-full px-4 py-2 bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
+          />
+        )}
+        {searchType === 'stateAndName' && (
+          <>
+            <input
+              type="text"
+              placeholder="Enter State..."
+              value={stateQuery}
+              onChange={(e) => setStateQuery(e.target.value)}
+              className="w-1/2 px-4 py-2 bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
+            />
+            <input
+              type="text"
+              placeholder="Enter Name..."
+              value={nameQuery}
+              onChange={(e) => setNameQuery(e.target.value)}
+              className="w-1/2 px-4 py-2 bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
+            />
+          </>
+        )}
         <button
           onClick={handleSearch}
           disabled={loading}
