@@ -6,31 +6,72 @@ import React, { useState } from 'react';
 const SearchPage = () => {
   const [searchType, setSearchType] = useState('stateAndName'); // Default to 'state'
   const [stateQuery, setStateQuery] = useState('');
-  const [nameQuery, setNameQuery] = useState('');
+  const [countyQuery, setCountyQuery] = useState('');
   const [results, setResults] = useState<[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSearch = async () => {
-    let query = '';
-    if (searchType === 'state') {
-      query = `state=${stateQuery}`;
-      if (!query.trim()) return;
-    } else if (searchType === 'stateAndName') {
-      if (!stateQuery.trim() || !nameQuery.trim()) return;
-      query = encodeURIComponent(`state=${stateQuery}&name=${nameQuery}`);
-    }
+  // page.tsx (Updated handleSearch function)
 
+  const handleSearch = async () => {
     setLoading(true);
     setError(null);
+    setResults(null); // Clear previous results
+
+    // Use URLSearchParams to build the query string safely
+    const params = new URLSearchParams();
+
+    // Basic validation: Ensure state is provided
+    if (!stateQuery.trim()) {
+      setError('State cannot be empty.');
+      setLoading(false);
+      return; // Stop if state is missing
+    }
+    params.append('state', stateQuery.trim()); // Add state
+
+    // Add name only if the search type requires it and it's not empty
+    if (searchType === 'stateAndName') {
+      if (!countyQuery.trim()) {
+        setError('Name cannot be empty when searching by state and name.');
+        setLoading(false);
+        return; // Stop if name is missing for this search type
+      }
+      params.append('county', countyQuery.trim()); // Add name
+    }
+
+    // The query string is now correctly formatted by params.toString()
+    const queryString = params.toString();
+    const apiUrl = `/api/search?${queryString}`;
+    console.log('Fetching URL:', apiUrl); // Good for debugging
 
     try {
-      const response = await fetch(`/api/search?${query}`); // Send search type to the API
-      if (!response.ok) throw new Error('Failed to fetch results');
+      const response = await fetch(apiUrl);
+
+      // Improved error handling: try to parse error JSON from API
+      if (!response.ok) {
+        let errorMsg = `Failed to fetch results. Status: ${response.status}`;
+        try {
+          // See if the API route sent back a JSON error message
+          const errorData = await response.json();
+          if (errorData.error) {
+            errorMsg = errorData.error; // Use the specific error from the API
+          }
+        } catch (e) {
+          console.error(e);
+          // Ignore if the error response wasn't JSON
+        }
+        throw new Error(errorMsg);
+      }
+
       const data = await response.json();
       setResults(data);
     } catch (err) {
-      if (err instanceof Error) setError(err.message);
+      if (err instanceof Error) {
+        setError(err.message); // Show the specific error message
+      } else {
+        setError('An unknown error occurred.');
+      }
+      console.error('Search failed:', err); // Log the full error for debugging
     } finally {
       setLoading(false);
     }
@@ -53,7 +94,7 @@ const SearchPage = () => {
           onChange={(e) => {
             setSearchType(e.target.value);
             setStateQuery(''); // Reset queries when search type changes
-            setNameQuery('');
+            setCountyQuery('');
           }}
           className="bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
         >
@@ -83,8 +124,8 @@ const SearchPage = () => {
             <input
               type="text"
               placeholder="Enter Name..."
-              value={nameQuery}
-              onChange={(e) => setNameQuery(e.target.value)}
+              value={countyQuery}
+              onChange={(e) => setCountyQuery(e.target.value)}
               className="w-1/2 px-4 py-2 bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
             />
           </>

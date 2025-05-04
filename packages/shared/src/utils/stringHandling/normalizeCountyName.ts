@@ -1,13 +1,13 @@
 export const normalizeCountyName = (str: string, isLouisiana = false) => {
-  const lowerCaseStr = str.toLowerCase();
-  const endsWithCounty = lowerCaseStr.endsWith(' county');
-  const endsWithParish = lowerCaseStr.endsWith(' parish');
+  const cased = str.toUpperCase();
+  const endsWithCounty = cased.endsWith(' COUNTY');
+  const endsWithParish = cased.endsWith(' PARISH');
 
   if (!endsWithCounty && !endsWithParish) {
     if (isLouisiana) {
-      return str.trim() + ' PARISH';
+      return cased.trim() + ' PARISH';
     } else {
-      return str.trim() + ' COUNTY';
+      return cased.trim() + ' COUNTY';
     }
   }
 
