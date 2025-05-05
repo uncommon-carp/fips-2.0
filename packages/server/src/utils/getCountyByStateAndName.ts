@@ -8,15 +8,27 @@ export const getCountyByStateAndName = async (
   const countyList = await fetchS3Object('county-bucket', 'fips_list.json');
   const parsedList = JSON.parse(countyList);
 
+  const specificCounty = parsedList.find(
+    (item: { state: string; county: string }) =>
+      item.state === 'TEXAS' && item.county === 'TRAVIS COUNTY',
+  );
+
+  console.log('Travis?:\n', specificCounty);
+
   const normalizedState = state.toUpperCase();
   console.log('getCountyByStateAndName:\n', { state: normalizedState, county });
 
   const options = {
     keys: ['state', 'county'],
+    threshold: 0.0,
   };
   const fuse = new Fuse(parsedList, options);
 
   const result = fuse.search({ state: state.toUpperCase(), county });
 
-  return result[0].item;
+  if (result.length > 0) {
+    return [result[0].item];
+  }
+
+  return [];
 };

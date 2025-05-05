@@ -25,7 +25,7 @@ export const getAllCounties: APIGatewayProxyHandler = async () => {
         body: fileContent,
       };
     } else {
-      console.log('Error retrieving for processing the file');
+      console.log('Error retrieving or processing the file');
       return {
         statusCode: 500,
         body: JSON.stringify({ message: 'Internal Server Error' }),
@@ -62,6 +62,7 @@ export const searchHandler: APIGatewayProxyHandler = async (
     } else {
       return { statusCode: 400, body: 'Invalid query parameters' };
     }
+    console.log('searchHandler', { result });
     return { statusCode: 200, body: JSON.stringify(result) };
   } catch (err) {
     console.error(err);
