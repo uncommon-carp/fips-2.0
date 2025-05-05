@@ -10,10 +10,15 @@ export const getCountyByStateAndName = async (
 
   const options = {
     keys: ['state', 'county'],
+    threshold: 0.0,
   };
   const fuse = new Fuse(parsedList, options);
 
-  const result = fuse.search({ state, county });
+  const result = fuse.search({ state: state.toUpperCase(), county });
 
-  return result[0].item;
+  if (result.length > 0) {
+    return [result[0].item];
+  }
+
+  return [];
 };

@@ -25,7 +25,7 @@ export const getAllCounties: APIGatewayProxyHandler = async () => {
         body: fileContent,
       };
     } else {
-      console.log('Error retrieving for processing the file');
+      console.log('Error retrieving or processing the file');
       return {
         statusCode: 500,
         body: JSON.stringify({ message: 'Internal Server Error' }),
@@ -49,10 +49,13 @@ export const searchHandler: APIGatewayProxyHandler = async (
 
   const { state, county } = event.queryStringParameters;
 
+  console.log('Incoming event:\n', { searchParams: { state, county }, event });
+
   try {
     let result;
     if (state && county) {
       const normalized = normalizeCountyName(county, state === 'LOUISIANA');
+      console.log({ normalized });
       result = await getCountyByStateAndName(state, normalized);
     } else if (state && !county) {
       result = await getCountiesByState(state);

@@ -6,7 +6,8 @@
   "license": "ISC",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "deploy": "npm run deploy --workspace=@fips/server"
+    "deploy": "npm run deploy --workspace=@fips/server",
+    "dev": "npm run dev --workspace=@fips/ui"
   },
   "workspaces": [
     "packages/server",
