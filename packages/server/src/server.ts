@@ -62,7 +62,6 @@ export const searchHandler: APIGatewayProxyHandler = async (
     } else {
       return { statusCode: 400, body: 'Invalid query parameters' };
     }
-    console.log('searchHandler', { result });
     return { statusCode: 200, body: JSON.stringify(result) };
   } catch (err) {
     console.error(err);

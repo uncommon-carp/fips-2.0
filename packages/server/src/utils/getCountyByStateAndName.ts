@@ -8,16 +8,6 @@ export const getCountyByStateAndName = async (
   const countyList = await fetchS3Object('county-bucket', 'fips_list.json');
   const parsedList = JSON.parse(countyList);
 
-  const specificCounty = parsedList.find(
-    (item: { state: string; county: string }) =>
-      item.state === 'TEXAS' && item.county === 'TRAVIS COUNTY',
-  );
-
-  console.log('Travis?:\n', specificCounty);
-
-  const normalizedState = state.toUpperCase();
-  console.log('getCountyByStateAndName:\n', { state: normalizedState, county });
-
   const options = {
     keys: ['state', 'county'],
     threshold: 0.0,
