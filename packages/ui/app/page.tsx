@@ -37,19 +37,19 @@ export default function HomePage() {
         <ul className="mt-6 space-y-4 text-gray-300">
           <li>
             <code className="block bg-gray-800 p-4 rounded-lg">
-              GET /counties - Retrieve all FIPS county codes
+              GET /index - Retrieve all FIPS county codes
             </code>
           </li>
           <li>
             <code className="block bg-gray-800 p-4 rounded-lg">
-              GET /counties/{'{state}'}/ - Retrieve FIPS codes for a specific
-              state
+              GET /counties?state=STATE_NAME - Retrieve FIPS codes for a
+              specific state
             </code>
           </li>
           <li>
             <code className="block bg-gray-800 p-4 rounded-lg">
-              GET /counties/{'{state}/{county}'}/ - Retrieve a specific FIPS
-              code
+              GET /counties?state=STATE_NAME&county=COUNTY_NAME - Retrieve a
+              specific FIPS code
             </code>
           </li>
         </ul>
