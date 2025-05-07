@@ -16,7 +16,6 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/search', label: 'Search' },
     { href: '/docs', label: 'API Docs' },
-    // Add more navigation links here if needed
   ];
 
   return (
@@ -29,7 +28,7 @@ export default function Navbar() {
           </a>
         </Link>
 
-        {/* Hamburger Menu Button (Visible on small screens) */}
+        {/* Hamburger Menu Button */}
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
@@ -40,7 +39,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Navigation Links (Full width on medium screens and up) */}
+        {/* Navigation Links */}
         <ul className="hidden md:flex space-x-4 md:space-x-6 items-center">
           {navLinks.map((link) => (
             <li key={link.href}>
@@ -54,7 +53,7 @@ export default function Navbar() {
         </ul>
       </div>
 
-      {/* Mobile Menu (Conditionally rendered based on isMenuOpen state) */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden pt-4 pb-2 border-t border-gray-700">
           <ul className="flex flex-col space-y-2">
