@@ -24,16 +24,40 @@ export default function HomePage() {
           What is the FIPS County Code API?
         </h2>
         <p className="mt-4 text-gray-300">
-          The FIPS County Code API provides a simple way to retrieve accurate
-          and up-to-date Federal Information Processing Standards (FIPS) county
-          codes. Ideal for data integration, analysis, and application
-          development.
+          The FIPS County Code API is an over-engineered REST API providing US
+          Federal Information Processing System (FIPS) county codes and a
+          development sandbox for myself. It's based on work by Derek Swingley,
+          found{' '}
+          <a href="https://derekswingley.com/2019/10/13/using-the-census-api-to-get-county-fips-codes/">
+            here
+          </a>
+        </p>
+        <p className="mt-4 text-gray-300">
+          Initially meant as a microservice for another project that ended up
+          not needing it, this API has become my go-to for technology and
+          concept testing. Now in it's third iteration, it's built in Typescript
+          and Next.js on AWS. This version will be in continuous development,
+          with a few new features planned for the near future.
         </p>
       </section>
 
-      {/* Endpoints Section */}
+      {/* How to Use the API Section */}
       <section className="py-12 px-6 md:px-16">
-        <h2 className="text-2xl font-semibold text-teal-400">API Endpoints</h2>
+        <h2 className="text-2xl font-semibold text-teal-400">
+          How do I use it?
+        </h2>
+        <p className="mt-4 text-gray-300">
+          The API accepts GET requests to one of two endpoints. The index
+          endpoint needs no query parameters, while 'counties' takes either just
+          a 'state' or both a 'state' and 'county' parameters. Easy peasy.
+          <code className="block bg-gray-800 p-4 mt-4 rounded-lg">
+            Base URL: https://api.fips.codes/
+          </code>
+        </p>
+
+        <h3 className="text-xl font-semibold mt-4 text-teal-400">
+          API Endpoints
+        </h3>
         <ul className="mt-6 space-y-4 text-gray-300">
           <li>
             <code className="block bg-gray-800 p-4 rounded-lg">
