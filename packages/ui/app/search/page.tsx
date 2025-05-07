@@ -78,8 +78,8 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#2a3941] text-white flex flex-col items-center py-10">
-      <h1 className="text-3xl font-bold mb-6">
+    <div className="min-h-screen bg-gray-900 text-gray-300 flex flex-col items-center py-10">
+      <h1 className="text-3xl text-teal-400 font-bold mb-6">
         {searchType === 'state'
           ? 'List All Counties For A State'
           : 'Get A Single County'}
@@ -96,7 +96,7 @@ const SearchPage = () => {
             setStateQuery(''); // Reset queries when search type changes
             setCountyQuery('');
           }}
-          className="bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
+          className="bg-gray-600 text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
         >
           <option value="state">By State</option>
           <option value="stateAndName">By State and Name</option>
@@ -109,7 +109,7 @@ const SearchPage = () => {
             placeholder="Enter State..."
             value={stateQuery}
             onChange={(e) => setStateQuery(e.target.value)}
-            className="w-full px-4 py-2 bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
+            className="w-full px-4 py-2 bg-gray-600 text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
           />
         )}
         {searchType === 'stateAndName' && (
@@ -119,14 +119,14 @@ const SearchPage = () => {
               placeholder="Enter State..."
               value={stateQuery}
               onChange={(e) => setStateQuery(e.target.value)}
-              className="w-1/2 px-4 py-2 bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
+              className="w-1/2 px-4 py-2 bg-gray-600 text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
             />
             <input
               type="text"
               placeholder="Enter Name..."
               value={countyQuery}
               onChange={(e) => setCountyQuery(e.target.value)}
-              className="w-1/2 px-4 py-2 bg-[#496e6e] text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
+              className="w-1/2 px-4 py-2 bg-gray-600 text-white border border-[#a1d9d2] rounded focus:outline-none focus:ring-2 focus:ring-[#a1d9d2]"
             />
           </>
         )}
